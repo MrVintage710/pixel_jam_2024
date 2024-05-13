@@ -14,10 +14,28 @@ public class PlayerController : MonoBehaviour {
     private Animator _animator;
     private PlayerInput _playerInput;
     
+    // Start is called before the first frame update
+    void Start() {
+        _animator = GetComponent<Animator>();
+        _playerInput = GetComponent<PlayerInput>();
+
+        _weaponRotator = transform.Find("WeaponRotator");
+        CompileWeaponComponents();
+        _activeWeapon = weaponComponents["Claw"];
+    }
+
+    // Update is called once per frame
+    void Update() {
+        _animator.SetBool("is_running", _movement != Vector2.zero);
+        GameManager.virtualPosition += _movement * (speed * Time.deltaTime);
+        RotateCrab();
+        ProcessWeaponTrigger();
+    }
 
     #region Input Processing
     private Vector2 _movement;
     private Vector2 _lookPoint;  //Gamepad direction or mouse position on screen.
+    private bool _weaponTrigger;
     
     public void OnMove(InputValue value) {
         _movement = value.Get<Vector2>();
@@ -32,21 +50,12 @@ public class PlayerController : MonoBehaviour {
             _lookPoint = value.Get<Vector2>();
         }
     }
+
+    public void OnFire()
+    {
+        _weaponTrigger = true;
+    }
     #endregion
-
-    // Start is called before the first frame update
-    void Start() {
-        _animator = GetComponent<Animator>();
-        _playerInput = GetComponent<PlayerInput>();
-        _weaponRotator = transform.Find("WeaponRotator");
-    }
-
-    // Update is called once per frame
-    void Update() {
-        _animator.SetBool("is_running", _movement != Vector2.zero);
-        GameManager.virtualPosition += _movement * (speed * Time.deltaTime);
-        RotateCrab();
-    }
 
     #region Rotation
     [SerializeField] private Transform cursorIndicator;
@@ -64,7 +73,7 @@ public class PlayerController : MonoBehaviour {
 
     #region Weapon Management
     private Dictionary<string, PlayerWeapon> weaponComponents;
-    private PlayerWeapon activeWeapon;
+    private PlayerWeapon _activeWeapon;
 
     private void CompileWeaponComponents()
     {
@@ -72,6 +81,14 @@ public class PlayerController : MonoBehaviour {
         foreach(PlayerWeapon weapon in GetComponents<PlayerWeapon>())
         {
             weaponComponents.Add(weapon.WeaponName, weapon);
+        }
+    }
+    private void ProcessWeaponTrigger()
+    {
+        if (_weaponTrigger)
+        {
+            _activeWeapon.PullTrigger();
+            _weaponTrigger = false;
         }
     }
     #endregion
