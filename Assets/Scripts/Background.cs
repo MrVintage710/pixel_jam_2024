@@ -18,7 +18,7 @@ public class Background : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        backgroundMaterial.mainTextureOffset = new Vector2(GameManager.virtualPosition.x / screenDims.x, GameManager.virtualPosition.y / screenDims.y);
+        backgroundMaterial.mainTextureOffset = new Vector2((GameManager.virtualPosition.x / screenDims.x) * aspectRatio, GameManager.virtualPosition.y / screenDims.y);
         updateSize();
     }
 

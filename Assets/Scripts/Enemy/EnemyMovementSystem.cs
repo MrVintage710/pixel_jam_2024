@@ -11,7 +11,6 @@ public partial struct EnemyMovementSystem : ISystem {
             var virtualPlayerPos = new float2(GameManager.virtualPosition.x, GameManager.virtualPosition.y);
             var virtualTarget = enemyValue.target + virtualPlayerPos;
             var movement = (math.normalizesafe(virtualTarget - enemyValue.virtualPos) * enemyValue.speed * SystemAPI.Time.DeltaTime);
-            movement *= new float2(Background.aspectRatio, 1.0f);
 
             enemy.ValueRW.virtualPos += movement;
             transform.ValueRW.Position = new float3((enemyValue.virtualPos - virtualPlayerPos), 0.0f);
