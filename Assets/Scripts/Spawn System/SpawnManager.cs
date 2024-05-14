@@ -20,7 +20,7 @@ public class SpawnManager : MonoBehaviour
 
     //Private Variables
     private int currentWave = 0;
-    private float threatMultiplier; //I'm going to try sqrt of current wave.
+    private float intensityModifier; //I'm going to try sqrt of current wave.
     private float waveStartTime = 0;
     private float unspentThreatPoints;
 
@@ -63,13 +63,13 @@ public class SpawnManager : MonoBehaviour
         currentWave++;
         Debug.Log($"Wave {currentWave} has begun.");
         CurrentPhase = WavePhase.Active;
-        threatMultiplier = Mathf.Sqrt(currentWave);
+        intensityModifier = Mathf.Sqrt(currentWave);
         unspentThreatPoints = 0; //These should already be 0 or close to.
     }
 
     private void ProcessThreat()
     {
-        float threatPerSecond = threatMultiplier * waveThreatCurve.Evaluate(Time.time - waveStartTime);
+        float threatPerSecond = intensityModifier * waveThreatCurve.Evaluate(Time.time - waveStartTime);
         if(threatPerSecond <= 0)
         {
             //The wave has reached its climax. Spend all threat points and move to ending.
@@ -112,7 +112,7 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnAnEnemy(Vector2 spawnPosition)
     {
-        //???
+        GameManager.SpawnEnemy(this, 15 * intensityModifier, 5.0f * intensityModifier, Vector2.zero, spawnPosition);
     }
     #endregion
 

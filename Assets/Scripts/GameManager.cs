@@ -13,11 +13,6 @@ public class GameManager : MonoBehaviour {
         public EnemyComponent data;
     }
 
-    private void Start() {
-        SpawnEnemy(this, 20.0f, 5.0f, Vector2.zero, new Vector2(20.0f, 50.0f));
-        SpawnEnemy(this, 25.0f, 5.0f, Vector2.zero, new Vector2(-20.0f, 50.0f));
-    }
-
     /// <summary>
     /// This method will tell the ECS world to spawn an Enemy that will start to move toward the player.
     /// </summary>
