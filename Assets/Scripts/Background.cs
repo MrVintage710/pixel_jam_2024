@@ -3,37 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Background : MonoBehaviour {
-
-    public static float aspectRatio = 1.0f;
     
     public Camera camera;
     public Material backgroundMaterial;
 
-    private Vector2 screenDims = Vector2.zero;
+    private float _aspectRatio = 1.0f;
+    private Vector2 _screenDims = Vector2.zero;
     
     // Start is called before the first frame update
     void Start() {
-        updateSize(true);
+        UpdateSize(true);
     }
 
     // Update is called once per frame
     void Update() {
-        backgroundMaterial.mainTextureOffset = new Vector2((GameManager.virtualPosition.x / screenDims.x) * aspectRatio, GameManager.virtualPosition.y / screenDims.y);
-        updateSize();
+        backgroundMaterial.mainTextureOffset = new Vector2((GameManager.virtualPosition.x / _screenDims.x) * _aspectRatio, GameManager.virtualPosition.y / _screenDims.y);
+        UpdateSize();
     }
 
-    private void updateSize(bool forceUpdate = false) {
+    private void UpdateSize(bool forceUpdate = false) {
         var halfSize = camera.orthographicSize;
-        aspectRatio = camera.aspect;
+        _aspectRatio = camera.aspect;
         var height = halfSize * 2;
-        var width = height * aspectRatio;
+        var width = height * _aspectRatio;
 
-        if (!Mathf.Approximately(width, screenDims.x) || !Mathf.Approximately(height, screenDims.y) || forceUpdate) {
+        if (!Mathf.Approximately(width, _screenDims.x) || !Mathf.Approximately(height, _screenDims.y) || forceUpdate) {
             var transform = GetComponent<Transform>();
             transform.localScale = new Vector3( width, height, 1.0f);
-            backgroundMaterial.mainTextureScale = new Vector2(aspectRatio, 1.0f);
-            screenDims.x = width;
-            screenDims.y = height;
+            backgroundMaterial.mainTextureScale = new Vector2(_aspectRatio, 1.0f);
+            _screenDims.x = width;
+            _screenDims.y = height;
         }
     }
 }
