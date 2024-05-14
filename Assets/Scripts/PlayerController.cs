@@ -1,19 +1,14 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.Entities;
+using Enemy;
 using Unity.Entities.Internal;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour {
-    public static event EventHandler<DamageEvent> DamageEventHandler;
+    
     public static Vector2 Hitbox = new Vector2(16.0f, 16.0f);
 
     public float speed = 0.5f;
@@ -24,15 +19,11 @@ public class PlayerController : MonoBehaviour {
     private SpriteRenderer _spriteRenderer;
     private float _invulnerableTime;
 
-    public struct DamageEvent {
-        public int damage;
-    }
-
     private void OnEnable() {
-        DamageEventHandler += OnDamageEventHandler;
+        ECSManager.DamagePlayerEventHandler += OnDamageEventHandler;
     }
 
-    private void OnDamageEventHandler(object sender, DamageEvent e) {
+    private void OnDamageEventHandler(object sender, DamagePlayerEvent e) {
         if (_invulnerableTime <= 0.0f) {
             Debug.Log("TAKING DAMAGE " + sender.GetType());
             health -= e.damage;
@@ -42,10 +33,6 @@ public class PlayerController : MonoBehaviour {
                 Debug.Log(component.ValueRO.virtualPos);
             }
         }
-    }
-
-    public static void Damage(object source, int damage) {
-        DamageEventHandler.Invoke(source, new DamageEvent { damage = damage});
     }
 
     // Start is called before the first frame update

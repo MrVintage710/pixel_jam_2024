@@ -112,7 +112,7 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnAnEnemy(Vector2 spawnPosition)
     {
-        GameManager.SpawnEnemy(this, 15 * intensityModifier, 5.0f * intensityModifier, Vector2.zero, spawnPosition);
+        ECSManager.SpawnEnemy(this, 15 * intensityModifier, 5.0f * intensityModifier, Vector2.zero, spawnPosition);
     }
     #endregion
 
