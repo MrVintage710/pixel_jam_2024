@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour {
 
-    public float speed = 0.2f;
+    public float speed = 0.5f;
     
     private Animator _animator;
     private PlayerInput _playerInput;
