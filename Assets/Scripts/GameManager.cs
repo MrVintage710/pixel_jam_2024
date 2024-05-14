@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    public static Vector2 virtualPosition = new Vector2();
+    public static Vector2 playerPosition = new Vector2();
     public static event EventHandler<SpawnEvent> SpawnEventHandler;
 
     public struct SpawnEvent {
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
             speed = speed, 
             health = health, 
             target = new float2(target.x, target.y),
-            virtualPos = (position + virtualPosition)
+            virtualPos = (position)
         };
         SpawnEventHandler.Invoke(source, new SpawnEvent {position = position, data = enemyComponent});
     }

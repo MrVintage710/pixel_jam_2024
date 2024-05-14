@@ -1,12 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.Entities;
 using Unity.Entities.Internal;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -62,7 +57,8 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         _animator.SetBool("is_running", _movement != Vector2.zero);
-        GameManager.virtualPosition += _movement * (speed * Time.deltaTime);
+        transform.position += (Vector3)(_movement * (speed * Time.deltaTime));
+        GameManager.playerPosition = transform.position;
         RotateCrab();
         ProcessWeaponTrigger();
         _invulnerableTime = Mathf.Clamp(_invulnerableTime - Time.deltaTime, 0.0f, 3.0f);
@@ -75,7 +71,7 @@ public class PlayerController : MonoBehaviour {
 
     #region Input Processing
     private Vector2 _movement;
-    private Vector2 _lookPoint;  //Gamepad direction or mouse position on screen.
+    private Vector2 _lookVector;  //Gamepad direction or mouse position on screen.
     private bool _weaponTrigger;
     
     public void OnMove(InputValue value) {
@@ -85,10 +81,10 @@ public class PlayerController : MonoBehaviour {
     public void OnLook(InputValue value) {
         if(_playerInput.currentControlScheme == "Keyboard&Mouse")
         {
-            _lookPoint = (Vector2)Camera.main.ScreenToWorldPoint(value.Get<Vector2>());
+            _lookVector = (Vector2)Camera.main.ScreenToWorldPoint(value.Get<Vector2>()) - (Vector2)transform.position;
         } else
         {
-            _lookPoint = value.Get<Vector2>();
+            _lookVector = value.Get<Vector2>();
         }
     }
 
@@ -105,9 +101,9 @@ public class PlayerController : MonoBehaviour {
     private Transform _weaponRotator; //Later we will probably just rotate the crab?
     private void RotateCrab()
     {
-        cursorIndicator.position = _lookPoint;
+        cursorIndicator.position = _lookVector;
         
-        Vector3 frameLookDirection = Vector3.RotateTowards(_weaponRotator.forward, _lookPoint, rotationRate * Time.deltaTime, 0);
+        Vector3 frameLookDirection = Vector3.RotateTowards(_weaponRotator.forward, _lookVector, rotationRate * Time.deltaTime, 0);
         _weaponRotator.LookAt(frameLookDirection, Vector3.back); //World Up is -z, aka Vector3.back.
     }
     #endregion

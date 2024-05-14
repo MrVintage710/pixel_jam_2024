@@ -7,7 +7,7 @@ namespace Enemy {
     public partial struct EnemyDamageSystem : ISystem {
         public void OnUpdate(ref SystemState state) {
             foreach (var enemy in SystemAPI.Query<RefRO<EnemyComponent>>()) {
-                var virtualPlayerPos = new float2(GameManager.virtualPosition.x, GameManager.virtualPosition.y);
+                var virtualPlayerPos = new float2(GameManager.playerPosition.x, GameManager.playerPosition.y);
                 var realPosition = enemy.ValueRO.virtualPos - virtualPlayerPos;
                 var halfWidth = PlayerController.Hitbox.x / 2.0f;
                 var halfHeight = PlayerController.Hitbox.y / 2.0f;
