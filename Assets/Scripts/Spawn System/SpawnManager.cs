@@ -99,7 +99,7 @@ public class SpawnManager : MonoBehaviour
     {
         //Choose Approach Vector
         float spawnAreaRadius = Mathf.Sqrt(pointsToSpend); //Area scales approximately with number of enemies.
-        Vector2 spawnAreaCenter = (spawnDistance + spawnAreaRadius) * Random.insideUnitCircle.normalized; //Choose a point on the spawn ring.
+        Vector2 spawnAreaCenter = ((spawnDistance + spawnAreaRadius) * Random.insideUnitCircle.normalized) + GameManager.playerPosition; //Choose a point on the spawn ring.
 
         //Spwan Enemies
         for(int i = 0; i < pointsToSpend; i++)
