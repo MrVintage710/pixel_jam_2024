@@ -67,12 +67,4 @@ namespace Enemy {
             }
         }
     }
-
-    public partial struct EnemyAnimationSystem : ISystem {
-        public void OnUpdate(ref SystemState state) {
-            // foreach (var sprite_render in SystemAPI.Query<RefRW<SpriteRenderer>>()) {
-            //     throw new NotImplementedException();
-            // }
-        }
-    }
 }
