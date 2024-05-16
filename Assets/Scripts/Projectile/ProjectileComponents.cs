@@ -5,6 +5,7 @@ namespace Projectile {
     public struct ProjectileComponent : IComponentData {
         public float2 direction;
         public float speed;
+        public int strength;
         public bool is_friendly;
     }
 

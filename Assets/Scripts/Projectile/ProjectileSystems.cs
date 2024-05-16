@@ -24,18 +24,19 @@ namespace Projectile {
             var entitySpawner = SystemAPI.GetSingleton<ProjectileSpawnerComponent>();
             foreach (var e in this._spawnQueue) {
                 var entity = entityManager.Instantiate(entitySpawner.enemyProjectile);
-                entityManager.SetComponentData(entity, e.data);
+                entityManager.SetComponentData(entity, e.projectileComponent);
+                entityManager.AddComponentData(entity, e.sizedComponent);
                 entityManager.SetComponentData(entity, new LocalTransform {
                     Position = new float3(e.position.x, e.position.y, 0.0f),
-                    Scale = 1.0f,
+                    Scale = e.sizedComponent.size,
                     Rotation = Quaternion.identity
                 });
             }
-            this._spawnQueue.Clear();
+            _spawnQueue.Clear();
         }
         
         protected override void OnCreate() {
-            this._spawnQueue = new List<SpawnProjectileEvent>();
+            _spawnQueue = new List<SpawnProjectileEvent>();
             ECSManager.SpawnProjectileEventHandler += ECSManagerOnSpawnProjectileEventHandler ;
         }
 

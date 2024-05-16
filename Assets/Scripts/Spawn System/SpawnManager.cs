@@ -112,7 +112,8 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnAnEnemy(Vector2 spawnPosition)
     {
-        ECSManager.SpawnEnemy(this, 15 * intensityModifier, 5.0f * intensityModifier, Vector2.zero, spawnPosition);
+        //TODO: Adjust the size of enemies
+        ECSManager.SpawnEnemy(this, 15 * intensityModifier, 5.0f * intensityModifier, 10.0f, Vector2.zero, spawnPosition);
     }
     #endregion
 

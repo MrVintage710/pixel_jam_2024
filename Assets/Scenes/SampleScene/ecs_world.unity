@@ -197,7 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d31e26fe3742d5aa00a6d6c752075c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 3886827593259177955, guid: da650603105fc48fa806dc5db02b8d44, type: 3}
+  enemyProjectile: {fileID: 3886827593259177955, guid: da650603105fc48fa806dc5db02b8d44, type: 3}
+  friendlyProjectile: {fileID: 3886827593259177955, guid: a2b4e42aa52e74cc2b2b51e033b0b45c, type: 3}
 --- !u!4 &1158548429
 Transform:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class ECSManager {
     
-    public static event EventHandler<SpawnEvent> SpawnEventHandler;
+    public static event EventHandler<SpawnEnemyEvent> SpawnEventHandler;
     public static event EventHandler<DamagePlayerEvent> DamagePlayerEventHandler;
     public static event EventHandler<SpawnProjectileEvent> SpawnProjectileEventHandler;
     public static event EventHandler<AreaDamageEvent> AreaDamageEventHandler; 
@@ -21,14 +21,15 @@ public class ECSManager {
     /// <param name="health">The Health of the Enemy</param>
     /// <param name="target">The movement target of the Enemy. 0.0 is the player</param>
     /// <param name="position">The starting position of the enemy Relative to the player.</param>
-    public static void SpawnEnemy(object source, float speed, float health, Vector2 target, Vector2 position) {
+    public static void SpawnEnemy(object source, float speed, float health, float size, Vector2 target, Vector2 position) {
         var enemyComponent = new EnemyComponent {
             speed = speed, 
             health = health, 
             target = new float2(target.x, target.y),
             virtualPos = (position)
         };
-        SpawnEventHandler.Invoke(source, new SpawnEvent {position = position, data = enemyComponent});
+        var sizedComponent = new SizedComponent { size = size };
+        SpawnEventHandler.Invoke(source, new SpawnEnemyEvent {position = position, enemyComponent = enemyComponent, sizedComponent = sizedComponent});
     }
 
     /// <summary>
@@ -40,15 +41,18 @@ public class ECSManager {
         DamagePlayerEventHandler.Invoke(source, new DamagePlayerEvent { damage = damage });
     }
 
-    public static void SpawnProjectile(object source, Vector2 pos, Vector2 direction, float speed, bool isFriendly) {
+    public static void SpawnProjectile(object source, Vector2 pos, Vector2 direction, float speed, float size, int strength, bool isFriendly) {
         var data = new ProjectileComponent {
             direction = new float2(direction.x, direction.y),
             speed = speed,
-            is_friendly = isFriendly
+            is_friendly = isFriendly,
+            strength = strength
         };
+        var sizedComponent = new SizedComponent { size = size };
         SpawnProjectileEventHandler.Invoke(source, new SpawnProjectileEvent {
             position = new float2(pos.x, pos.y),
-            data = data
+            projectileComponent = data,
+            sizedComponent = sizedComponent
         });
     }
 
@@ -62,14 +66,16 @@ public class ECSManager {
     }
 }
 
-public struct SpawnEvent {
+public struct SpawnEnemyEvent {
     public float2 position;
-    public EnemyComponent data;
+    public SizedComponent sizedComponent;
+    public EnemyComponent enemyComponent;
 }
 
 public struct SpawnProjectileEvent {
     public float2 position;
-    public ProjectileComponent data;
+    public SizedComponent sizedComponent;
+    public ProjectileComponent projectileComponent;
 }
 
 public struct DamagePlayerEvent {
