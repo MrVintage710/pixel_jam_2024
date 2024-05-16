@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enemy;
+using Projectile;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -39,6 +40,18 @@ public class ECSManager {
         DamagePlayerEventHandler.Invoke(source, new DamagePlayerEvent { damage = damage });
     }
 
+    public static void SpawnProjectile(object source, Vector2 pos, Vector2 direction, float speed, bool isFriendly) {
+        var data = new ProjectileComponent {
+            direction = new float2(direction.x, direction.y),
+            speed = speed,
+            is_friendly = isFriendly
+        };
+        SpawnProjectileEventHandler.Invoke(source, new SpawnProjectileEvent {
+            position = new float2(pos.x, pos.y),
+            data = data
+        });
+    }
+
     public static void AreaDamage(object source, int damage, Vector2 pos, float radius) {
         var data = new AreaDamageEvent {
             damage = damage,
@@ -56,6 +69,7 @@ public struct SpawnEvent {
 
 public struct SpawnProjectileEvent {
     public float2 position;
+    public ProjectileComponent data;
 }
 
 public struct DamagePlayerEvent {

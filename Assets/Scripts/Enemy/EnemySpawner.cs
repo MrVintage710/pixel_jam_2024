@@ -10,7 +10,7 @@ namespace Enemy {
             public override void Bake(EnemySpawner authoring) {
                 var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent(entity, new EnemySpawnComponent() {
-                    enemyPrefab = GetEntity(authoring.enemyPrefab, TransformUsageFlags.None)
+                    enemyPrefab = GetEntity(authoring.enemyPrefab, TransformUsageFlags.Dynamic)
                 });
             }
         }
