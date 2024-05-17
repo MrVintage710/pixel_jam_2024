@@ -102,7 +102,6 @@ public class MapManager : MonoBehaviour
         //If no free piece is found, instantiate another one.
         TerrainPiece terrainPiece = new TerrainPiece();
         GameObject terrainObject = Instantiate(terrainPrefab);
-        terrainObject.transform.parent = transform; //Parent to this. We will use this object to maneuver all the terrain.
         terrainPiece.objectRenderer = terrainObject.GetComponent<SpriteRenderer>();
         terrainPool.Add(terrainPiece);
         return terrainPiece;

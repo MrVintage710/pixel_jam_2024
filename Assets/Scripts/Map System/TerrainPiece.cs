@@ -10,7 +10,7 @@ public class TerrainPiece
     {
         //Set sprite and radius
         objectRenderer.sprite = sprite;
-        Radius = sprite.bounds.extents.x;
+        Radius = sprite.bounds.extents.x * 0.75f;
         CircleCollider2D collider = objectRenderer.GetComponent<CircleCollider2D>();
         collider.radius = Radius;
 
