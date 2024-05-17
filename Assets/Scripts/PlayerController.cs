@@ -38,11 +38,13 @@ public class PlayerController : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        _animator = GetComponent<Animator>();
+        
         _playerInput = GetComponent<PlayerInput>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
 
-        _weaponRotator = transform.Find("WeaponRotator");
+
+        _lookTransform = transform.Find("LookTransform");
+        _animator = _lookTransform.GetComponentInChildren<Animator>();
+        _spriteRenderer = _lookTransform.GetComponentInChildren<SpriteRenderer>();
         CompileWeaponComponents();
         _activeWeapon = weaponComponents["Claw"];
     }
@@ -74,7 +76,7 @@ public class PlayerController : MonoBehaviour {
     public void OnLook(InputValue value) {
         if(_playerInput.currentControlScheme == "Keyboard&Mouse")
         {
-            _lookVector = (Vector2)Camera.main.ScreenToWorldPoint(value.Get<Vector2>()) - (Vector2)transform.position;
+            _lookVector = (Vector2)(Camera.main.ScreenToWorldPoint(value.Get<Vector2>()) - transform.position);
         } else
         {
             _lookVector = value.Get<Vector2>();
@@ -91,13 +93,14 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private Transform cursorIndicator;
 
     [SerializeField] private float rotationRate = 4f; //In radians/sec
-    private Transform _weaponRotator; //Later we will probably just rotate the crab?
+    private Transform _lookTransform; //Later we will probably just rotate the crab?
     private void RotateCrab()
     {
-        cursorIndicator.position = _lookVector;
-        
-        Vector3 frameLookDirection = Vector3.RotateTowards(_weaponRotator.forward, _lookVector, rotationRate * Time.deltaTime, 0);
-        _weaponRotator.LookAt(frameLookDirection, Vector3.back); //World Up is -z, aka Vector3.back.
+        Vector3 lookPoint = transform.position + (Vector3)_lookVector;
+        cursorIndicator.position = lookPoint;
+
+        Vector3 frameLookDirection = Vector3.RotateTowards(_lookTransform.forward, _lookVector, rotationRate * Time.deltaTime, 0);
+        _lookTransform.LookAt(frameLookDirection + transform.position, Vector3.back); //World Up is -z, aka Vector3.back.
     }
     #endregion
 
