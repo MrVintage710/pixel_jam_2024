@@ -62,7 +62,7 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        UpdateTerrainCollision.Invoke(collisionList.ToArray());
+        UpdateTerrainCollision?.Invoke(collisionList.ToArray());
     }
 
     private void FormatTerrainInTile(int xCoord, int yCoord)
